@@ -3,7 +3,7 @@ close all;
 
 mapName = 'manhattan';
 % mapIndex = 4;
-for mapIndex = 5:10
+for mapIndex = 2:10
     %% load map
     mapFileName = strcat('maps/', mapName, '/osm/map_', int2str(mapIndex), '.xml');
     viewer = siteviewer("Buildings", mapFileName, "Basemap", "openstreetmap");
@@ -24,6 +24,7 @@ for mapIndex = 5:10
     show(rxSites);
     
     %% read tx locs
+    margin = 0.002;
     operator = 1; % 1: verizon, 2: att, 3: tmobile
     switch operator
         case 1
@@ -35,8 +36,10 @@ for mapIndex = 5:10
     end
     
     txAllLocs = readmatrix(strcat('maps/', mapName, '/towers/', opName, '.csv'));
-    latiFilter = txAllLocs(:, 1) < latiRange(2) & txAllLocs(:, 1) > latiRange(1);
-    longFilter = txAllLocs(:, 2) < longRange(2) & txAllLocs(:, 2) > longRange(1);
+    latiFilter = txAllLocs(:, 1) < latiRange(2) + margin ...
+        & txAllLocs(:, 1) > latiRange(1) - margin;
+    longFilter = txAllLocs(:, 2) < longRange(2) + margin ...
+        & txAllLocs(:, 2) > longRange(1) - margin;
     txLocs = txAllLocs(latiFilter & longFilter, :);
     txLati = txLocs(:, 1);
     txLong = txLocs(:, 2);
