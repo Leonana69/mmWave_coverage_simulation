@@ -2,8 +2,8 @@ clear;
 close all;
 
 mapName = 'manhattan';
-operator = 2; % 1: verizon, 2: att, 3: tmobile
-for mapIndex = 1:21
+operator = 3; % 1: verizon, 2: att, 3: tmobile
+for mapIndex = 0:21
     %% load map
     mapFileName = strcat('maps/', mapName, '/osm/map_', int2str(mapIndex), '.xml');
     viewer = siteviewer("Buildings", mapFileName, "Basemap", "openstreetmap");
