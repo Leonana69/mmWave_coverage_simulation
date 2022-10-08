@@ -1,8 +1,0 @@
-clear;
-close all;
-% tree = readstruct('maps\\osm\\new_haven.xml');
-% tree.bounds
-tree = xmlread('maps\\osm\\new_haven.xml');
-
-osm = getElementsByTagName(tree, 'osm');
-osm.getFirstChild
