@@ -8,8 +8,12 @@ import time
 mapName = 'manhattan'
 
 map_ranges = []
+op = 3
+global mcc
+global mnc
+global file_prefix
 
-def get_tower_raw(op):
+def get_tower_raw():
 	url_format = 'https://api.cellmapper.net/v6/getTowers?MCC={mcc}&MNC={mnc}&RAT=LTE&boundsNELatitude={lati_max}&boundsNELongitude={long_max}&boundsSWLatitude={lati_min}&boundsSWLongitude={long_min}&filterFrequency=false&showOnlyMine=false&showUnverifiedOnly=false&showENDCOnly=false'
 	cnt = 0
 
@@ -18,23 +22,16 @@ def get_tower_raw(op):
 		if index < start_index:
 			continue
 		ix = input('Enter to start...')
-		if op == 1:
-			mcc = 311
-			mnc = 480
-			file_prefix = 'ver'
-
+		
 		url = url_format.format(mcc = mcc, mnc = mnc, lati_max = r[0], long_max = r[1], lati_min = r[2], long_min = r[3])
 		contents = urllib.request.urlopen(url).read()
 		with open(mapName + '/towers/' + file_prefix + '-' + str(index) + '-raw-{}-{}-{}-{}.txt'.format(r[0], r[1], r[2], r[3]), 'wb') as f:
 			f.write(contents)
 		print('write to => towers/' + file_prefix + '-raw-{}-{}-{}-{}.txt'.format(r[0], r[1], r[2], r[3]))
 
-def parsr_tower_location(op):
+def parsr_tower_location():
 	locs = []
 	for index, r in enumerate(map_ranges):
-		if op == 1:
-			file_prefix = 'ver'
-
 		with open(mapName + '/towers/' + file_prefix + '-' + str(index) + '-raw-{}-{}-{}-{}.txt'.format(r[0], r[1], r[2], r[3]), 'rb') as f:
 			contents = f.read()
 
@@ -48,9 +45,9 @@ def parsr_tower_location(op):
 
 	if op == 1:
 		outputName = mapName + '/towers/ver.csv'
-	if op == 2:
+	elif op == 2:
 		outputName = mapName + '/towers/att.csv'
-	if op == 3:
+	elif op == 3:
 		outputName = mapName + '/towers/tmb.csv'
 	with open(outputName, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile)
@@ -61,11 +58,21 @@ if __name__=='__main__':
 	# 1 version
 	# 2 att
 	# 3 t-mobile
-
+	if op == 1:
+		mcc = 311
+		mnc = 480
+		file_prefix = 'ver'
+	elif op == 2:
+		mcc = 310
+		mnc = 410
+		file_prefix = 'att'
+	elif op == 3:
+		mcc = 310
+		mnc = 260
+		file_prefix = 'tmb'
 	with open(mapName + '/maps_range_list.txt', 'r') as fp:
 		for line in fp.readlines():
 			f_list = [float(i) for i in line.split(' ')]
 			map_ranges.append([f_list[0], f_list[1], f_list[2], f_list[3]])
-	op = 1
-	# get_tower_raw(op)
-	parsr_tower_location(op)
+	get_tower_raw()
+	parsr_tower_location()
