@@ -1,7 +1,7 @@
 clear;
 close all;
 
-viewer = siteviewer("Basemap", "openstreetmap");
+viewer = siteviewer("Buildings", "maps/manhattan/osm/map_0.xml", "Basemap", "openstreetmap");
 mapName = 'manhattan';
 mapIndex = 0;
 
