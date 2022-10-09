@@ -5,10 +5,13 @@ import json
 import csv
 import time
 
-mapName = 'manhattan'
+if 0:
+    mapName = 'manhattan'
+else:
+    mapName = 'jersey'
 
 map_ranges = []
-op = 3
+op = 2
 global mcc
 global mnc
 global file_prefix
@@ -27,7 +30,7 @@ def get_tower_raw():
 		contents = urllib.request.urlopen(url).read()
 		with open(mapName + '/towers/' + file_prefix + '-' + str(index) + '-raw-{}-{}-{}-{}.txt'.format(r[0], r[1], r[2], r[3]), 'wb') as f:
 			f.write(contents)
-		print('write to => towers/' + file_prefix + '-raw-{}-{}-{}-{}.txt'.format(r[0], r[1], r[2], r[3]))
+		print('write to => towers/' + file_prefix + '-' + str(index) + '-raw-{}-{}-{}-{}.txt'.format(r[0], r[1], r[2], r[3]))
 
 def parsr_tower_location():
 	locs = []

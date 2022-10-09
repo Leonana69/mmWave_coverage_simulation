@@ -62,47 +62,10 @@ for mapIndex = 0:0
         "TerrainMaterial","concrete");
     rays = raytrace(txSites, rxSites, rtpm);
     
-    %%
-%     connectedRay = cell(1, rxCount);
-%     pathLoss = zeros(2, rxCount); % LOS, reflected-NLOS
-%     for rx = 1 : rxCount % for each simulation point
-%         minDirectDis = 9e9;
-%         minReflectedDis = 9e9;
-%         for tx = 1 : txCount % check the possible links
-%             tempRay = rays(tx, rx);
-%             tempRay = tempRay{1};
-%             if (~isempty(tempRay))
-%                 for p = tempRay
-%                     if p.LineOfSight
-%                         if p.PropagationDistance < minDirectDis
-%                             minDirectDis = p.PropagationDistance;
-%                             % calculate the SINR
-%                             connectedRay{rx} = p;
-%                         end
-%                     else
-%                         if p.PropagationDistance < minReflectedDis
-%                             minReflectedDis = p.PropagationDistance;
-%                             % calculate the SINR
-%                             connectedRay{rx} = p;
-%                         end
-%                     end
-%                     
-%                 end
-%             end
-%         end
-%     
-%         % [d_dis, d_index] = min(direct_dis(rx, :));
-%         pathLoss(1, rx) = loss_ideal_LOS(minDirectDis);
-%         pathLoss(2, rx) = loss_ideal_1R(minReflectedDis);
-%     end
-%     
-%     finalPathLoss = [rxLati, rxLong, min(pathLoss, [], 1)'];
-    
     %% save the workspace
     folderName = strcat('results/', mapName, '/map_', int2str(mapIndex), '/', opName);
     if ~exist(folderName, 'dir')
        mkdir(folderName)
     end
-%     save(strcat(folderName, '/finalPathLoss'), 'finalPathLoss')
     save(strcat(folderName, '/workspace'))
 end

@@ -5,8 +5,12 @@ from dis import dis
 from math import sin, cos, sqrt, atan2, radians
 import sys, os, getopt
 
-mapName = 'manhattan'
-mapCount = 22
+if 0:
+    mapName = 'manhattan'
+    mapCount = 22
+else:
+    mapName = 'jersey'
+    mapCount = 15
 
 margin = 0.0008
 

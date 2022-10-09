@@ -1,15 +1,29 @@
 import requests
 import cv2
 
-mapName = 'manhattan'
-##### block manhattan start #####
-# left border, from north to south
-city_range = [
-    [40.8156, -73.9644, 40.7564, -74.0080],
-    [40.7564, -74.0080, 40.703618, -74.019097]]
-x_count = [2, 2]
-block_size_sets = [[0.012, 0.028], [0.012, 0.023]]
-##### block manhattan end #####
+if 0:
+    ##### block manhattan start #####
+    mapName = 'manhattan'
+    # left border, from north to south
+    city_range = [
+        [40.8156, -73.9644, 40.7564, -74.0080],
+        [40.7564, -74.0080, 40.703618, -74.019097]]
+    x_count = [2, 2]
+    block_size_sets = [[0.012, 0.028], [0.012, 0.023]]
+    img_range = [-74.0228, 40.6985, -73.9219, 40.8191]
+    ##### block manhattan end #####
+else:
+    ##### block jersey start #####
+    mapName = 'jersey'
+    # left border, from north to south
+    city_range = [
+        [40.7867, -74.0360, 40.7571, -74.0561],
+        [40.7571, -74.0602, 40.7435, -74.0676],
+        [40.7435, -74.0800, 40.7128, -74.1004],]
+    x_count = [1, 3, 2]
+    block_size_sets = [[0.012, 0.032], [0.012, 0.017], [0.012, 0.032]]
+    img_range = [-74.0959, 40.7059, -74.0199, 40.7925]
+    ##### block jersey end #####
 
 # small overlap is enough
 overlap = 0.0018
@@ -39,8 +53,6 @@ def download(flag):
 
     if flag:
         for i, r in enumerate(maps):
-            if i < 12:
-                continue
             print('downloading map {}...'.format(i))
             file = requests.get("https://www.openstreetmap.org/api/0.6/map?bbox="
                 + "{:.4f}".format(r[0]) + "%2C"
@@ -50,7 +62,6 @@ def download(flag):
             open(mapName + "/osm/map_" + str(i) + ".xml", "wb").write(file.content)
 
 def plot():
-    img_range = [-74.0228, 40.6985, -73.9219, 40.8191]
     img = cv2.imread(mapName + '/' + mapName + '.jpg')
     width = img.shape[1]
     height = img.shape[0]
@@ -77,5 +88,5 @@ def plot():
     return
 
 if __name__=='__main__':
-    download(0)
+    download(1)
     plot()
