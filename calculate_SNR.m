@@ -1,9 +1,11 @@
 clear;
 close all;
 
-mapName = 'manhattan';
-operator = 3; % 1: verizon, 2: att, 3: tmobile
-for mapIndex = 0:21
+mapName = 'jersey';
+% mapName = 'manhattan';
+mapCount = 15;
+operator = 1; % 1: verizon, 2: att, 3: tmobile
+for mapIndex = 0:mapCount - 1
     switch operator
         case 1
             opName = "ver";
