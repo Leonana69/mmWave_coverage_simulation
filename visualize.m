@@ -14,7 +14,7 @@ switch operator
         opName = "tmb";
 end
 finalPathLoss = [];
-mapCount = 2;
+mapCount = 1;
 
 for index = 0 : mapCount - 1
     folderName = strcat('results/', mapName, '/map_', int2str(index), '/', opName);
@@ -35,7 +35,7 @@ for cnt = 1:length(uFinalPathLoss)
 end
 
 %% calculate SNR
-txPower = 28;
+txPower = 45;
 txRxAntennaG = 16;
 rxNoiseFloor = -174 + 10*log10(100e6) + 10; % noise figure: 10
 SNR = txPower + txRxAntennaG - rxNoiseFloor - uFinalPathLoss(:, 3);
@@ -43,9 +43,16 @@ SNR = txPower + txRxAntennaG - rxNoiseFloor - uFinalPathLoss(:, 3);
 %%
 viewer = siteviewer("Basemap","openstreetmap");
 
-%%
+%% SNR
 data_table = table(uFinalPathLoss(:, 1), uFinalPathLoss(:, 2), SNR);
 data_table.Properties.VariableNames = {'latitude', 'longitude', 'ss' };
 pd = propagationData(data_table);
 clearMap(viewer)
-plot(pd, "Colormap", parula);
+contour(pd);
+
+%% path loss
+data_table = table(uFinalPathLoss(:, 1), uFinalPathLoss(:, 2), uFinalPathLoss(:, 3));
+data_table.Properties.VariableNames = {'latitude', 'longitude', 'ss' };
+pd = propagationData(data_table);
+clearMap(viewer)
+plot(pd, "LegendTitle", "Path Loss (dB)", "MarkerSize", 3, "Colormap", "parula");

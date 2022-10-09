@@ -1,16 +1,36 @@
 clear;
 close all;
 
-finalPathLoss = [[1, 2, 5]; [1, 2, 6]; [3, 4, 6]; [3, 2, 6]; [3, 4, 8]];
+viewer = siteviewer("Basemap", "openstreetmap");
+mapName = 'manhattan';
+mapIndex = 0;
 
-locs = finalPathLoss(:, 1:2);
-[u_locs, index, J] = unique(locs, 'rows');
-uFinalPathLoss = finalPathLoss(index, :);
+%%
+rxLocs = readmatrix(strcat('maps/', mapName, '/rx_loc/map_', int2str(mapIndex), '_mloc.csv'));
 
-for cnt = 1:length(uFinalPathLoss)
-    subLoc = uFinalPathLoss(cnt, 1:2);
-    sameValueId = locs(:, 1) == subLoc(1) & locs(:, 2) == subLoc(2);
-    subSet = finalPathLoss(sameValueId, :);
-    value = max(subSet(:, 3));
-    uFinalPathLoss(cnt, 3) = value;
-end
+rxLati = rxLocs(3:end, 1);
+rxLong = rxLocs(3:end, 2);
+rxCount = length(rxLong);
+
+rxSites = rxsite("Name","User locations", ...
+    "Latitude", rxLati, ...
+    "Longitude", rxLong, ...
+    "AntennaHeight", 1.5);
+clearMap(viewer);
+show(rxSites);
+%%
+txLocs = readmatrix(strcat('maps/', mapName, '/towers/', 'ver', '.csv'));
+txLati = txLocs(:, 1);
+txLong = txLocs(:, 2);
+txCount = length(txLati);
+
+data_table = table(txLati, txLong, zeros(txCount));
+data_table.Properties.VariableNames = {'latitude', 'longitude', 'ss' };
+pd = propagationData(data_table);
+clearMap(viewer)
+plot(pd, "LegendTitle", "Path Loss (dB)", "MarkerSize", 6, "Colors", [0.9, 0.3, 0.3]);
+
+%%
+a = finalPathLoss_high(:, 3);
+b = finalPathLoss(:, 3);
+plot(a-b)
